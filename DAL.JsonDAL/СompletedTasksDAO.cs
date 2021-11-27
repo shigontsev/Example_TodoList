@@ -19,8 +19,8 @@ namespace DAL.JsonDAL
 
         public СompletedTasksDAO()
         {
-            _filePath_СompletedTasks = "";
-            _filePath_Notes = "";
+            _filePath_СompletedTasks = FilePath.JsonСompletedTasks;
+            _filePath_Notes = FilePath.JsonNotesPath;
             //_content = JsonDAO<Guid>.Deserialize(_filePath_СompletedTasks);
         }
 

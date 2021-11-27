@@ -12,11 +12,11 @@ namespace DAL.JsonDAL
     {
         //private List<Note> _content;
 
-        private string _filePath;
+        private string _filePath_Notes;
 
         public TodoListDAO()
         {
-            _filePath = "";
+            _filePath_Notes = FilePath.JsonNotesPath;
             //_content = JsonDAO<Note>.Deserialize(_filePath);
         }
 
@@ -25,7 +25,7 @@ namespace DAL.JsonDAL
             var notes = GetAll();
             notes.Add(note);
 
-            JsonDAO<Note>.Serialize(_filePath, notes);
+            JsonDAO<Note>.Serialize(_filePath_Notes, notes);
         }
 
         //public void CompleteTask(Guid id)
@@ -35,7 +35,7 @@ namespace DAL.JsonDAL
 
         public List<Note> GetAll()
         {
-            return JsonDAO<Note>.Deserialize(_filePath);
+            return JsonDAO<Note>.Deserialize(_filePath_Notes);
         }
 
         public Note GetById(Guid id)
@@ -60,7 +60,7 @@ namespace DAL.JsonDAL
             {
                 var notes = GetAll();
                 notes.Remove(note);
-                JsonDAO<Note>.Serialize(_filePath, notes);
+                JsonDAO<Note>.Serialize(_filePath_Notes, notes);
 
                 return true;
             }
@@ -71,7 +71,7 @@ namespace DAL.JsonDAL
         public void SortByPriority()
         {
             var notes = GetAll().OrderBy(x => x.Priority).ToList();
-            JsonDAO<Note>.Serialize(_filePath, notes);
+            JsonDAO<Note>.Serialize(_filePath_Notes, notes);
         }
     }
 }
