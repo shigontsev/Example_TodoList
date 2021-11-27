@@ -48,10 +48,10 @@ namespace DAL.JsonDAL
             return GetAll().FirstOrDefault(x => x.Name == name);
         }
 
-        public List<Note> GetBySubName(string subName)
-        {
-            throw new NotImplementedException();
-        }
+        //public List<Note> GetBySubName(string subName)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public bool Remove(Guid id)
         {
