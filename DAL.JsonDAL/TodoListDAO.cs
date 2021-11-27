@@ -10,22 +10,22 @@ namespace DAL.JsonDAL
 {
     public class TodoListDAO : ITodoListDAO
     {
-        private List<Note> _content;
+        //private List<Note> _content;
 
         private string _filePath;
 
         public TodoListDAO()
         {
             _filePath = "";
-            _content = JsonDAO<Note>.Deserialize(_filePath);
+            //_content = JsonDAO<Note>.Deserialize(_filePath);
         }
 
         public void Add(Note note)
         {
-            _content.Add(note);
-            SortByPriority();
+            var notes = GetAll();
+            notes.Add(note);
 
-            JsonDAO<Note>.Serialize(_filePath, _content);
+            JsonDAO<Note>.Serialize(_filePath, notes);
         }
 
         //public void CompleteTask(Guid id)
@@ -35,17 +35,17 @@ namespace DAL.JsonDAL
 
         public List<Note> GetAll()
         {
-            return _content.ToList();
+            return JsonDAO<Note>.Deserialize(_filePath);
         }
 
         public Note GetById(Guid id)
         {
-            return _content.FirstOrDefault(x => x.Id == id);
+            return GetAll().FirstOrDefault(x => x.Id == id);
         }
 
         public Note GetByName(string name)
         {
-            return _content.FirstOrDefault(x => x.Name == name);
+            return GetAll().FirstOrDefault(x => x.Name == name);
         }
 
         public List<Note> GetBySubName(string subName)
@@ -58,8 +58,9 @@ namespace DAL.JsonDAL
             var note = GetById(id);
             if (note != null)
             {
-                _content.Remove(note);
-                JsonDAO<Note>.Serialize(_filePath, (List<Note>)_content);
+                var notes = GetAll();
+                notes.Remove(note);
+                JsonDAO<Note>.Serialize(_filePath, notes);
 
                 return true;
             }
@@ -69,7 +70,8 @@ namespace DAL.JsonDAL
 
         public void SortByPriority()
         {
-            _content = _content.OrderBy(x => x.Priority).ToList();
+            var notes = GetAll().OrderBy(x => x.Priority).ToList();
+            JsonDAO<Note>.Serialize(_filePath, notes);
         }
     }
 }
