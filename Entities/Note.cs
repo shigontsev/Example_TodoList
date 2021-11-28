@@ -24,16 +24,16 @@ namespace Entities
         }
 
         [JsonIgnore]
-        private int _priority;
+        private Priority _priority;
 
-        public int Priority
+        public Priority Priority
         {
             get { return _priority; }
             private set
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(Priority), $"Аргумент {nameof(Priority)} должен быть в диапозоне 1...N");
+                    throw new ArgumentOutOfRangeException(nameof(Priority), $"Аргумент {nameof(Priority)} должен быть в диапозоне VeryHigh...VeryLow (1...5)");
                 }
                 _priority = value;
             }
@@ -56,7 +56,7 @@ namespace Entities
         }
 
 
-        public Note(Guid id, string name, int priority, string text)
+        public Note(Guid id, string name, Priority priority, string text)
         {
             Id = id;
             Name = name;
@@ -64,7 +64,7 @@ namespace Entities
             Text = text;
         }
 
-        public Note(string name, int priority, string text)
+        public Note(string name, Priority priority, string text)
         {
             Id = Guid.NewGuid();
             Name = name;
