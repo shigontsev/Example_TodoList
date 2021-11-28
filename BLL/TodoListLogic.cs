@@ -48,6 +48,11 @@ namespace BLL
             return Remove(note.Id);
         }
 
+        public bool RemoveAt(int index)
+        {
+            return _todoListDAO.RemoveAt(index);
+        }
+
         public void SortByPriority()
         {
             _todoListDAO.SortByPriority();

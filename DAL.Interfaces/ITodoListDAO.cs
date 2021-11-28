@@ -28,6 +28,12 @@ namespace DAL.Interfaces
         bool Remove(Guid id);
 
         /// <summary>
+        /// Удалить задачу по его Index
+        /// </summary>
+        /// <param name="index"></param>
+        bool RemoveAt(int index);
+
+        /// <summary>
         /// Сортировка задач по Priority
         /// </summary>
         void SortByPriority();

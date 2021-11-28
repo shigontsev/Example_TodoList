@@ -13,7 +13,7 @@ namespace DAL.Interfaces
         /// Выполнить Задачу по его Id
         /// </summary>
         /// <param name="id"></param>
-        void Complete(Guid id);
+        bool Complete(Guid id);
 
         //void GetAll();
 

@@ -32,6 +32,12 @@ namespace BLL.Interfaces
         bool Remove(Note note);
 
         /// <summary>
+        /// Удалить задачу по его Index
+        /// </summary>
+        /// <param name="index"></param>
+        bool RemoveAt(int index);
+
+        /// <summary>
         /// Сортировка задач по Priority
         /// </summary>
         void SortByPriority();

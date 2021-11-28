@@ -24,14 +24,16 @@ namespace DAL.JsonDAL
             //_content = JsonDAO<Guid>.Deserialize(_filePath_СompletedTasks);
         }
 
-        public void Complete(Guid id)
+        public bool Complete(Guid id)
         {
             var idList = GetAllIdCompleted();
             if (!idList.Contains(id))
             {
                 idList.Add(id);
                 JsonDAO<Guid>.Serialize(_filePath_СompletedTasks, idList);
+                return true;
             }
+            return false;
         }
 
         private List<Guid> GetAllIdCompleted()

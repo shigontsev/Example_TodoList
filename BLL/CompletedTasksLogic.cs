@@ -15,9 +15,9 @@ namespace BLL
             _сompletedTasksDAO = сompletedTasksDAO;
         }
 
-        public void Complete(Guid id)
+        public bool Complete(Guid id)
         {
-            _сompletedTasksDAO.Complete(id);
+            return _сompletedTasksDAO.Complete(id);
         }
 
         public List<Note> GetAllCompleted()

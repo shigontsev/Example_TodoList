@@ -36,7 +36,7 @@ namespace DAL.JsonDAL
             }
             //List<T> users = JsonConvert.DeserializeObject<List<T>>(File.ReadAllText(filePath));
 
-            return users;
+            return users == null? new List<T>(): users;
         }
 
         /// <summary>
@@ -46,14 +46,16 @@ namespace DAL.JsonDAL
         /// <param name="list"></param>
         internal static void Serialize(string filePath, List<T> list)
         {
-            //if (!File.Exists(filePath))
-            //{
-            //    //throw new FileNotFoundException(
-            //    //    string.Format("File at path {0} isn't exist!",
-            //    //        filePath));
-            //    File.Create(filePath);
-            //    Thread.Sleep(TimeSpan.FromMilliseconds(300));
-            //}
+            if (!File.Exists(filePath))
+            {
+                //throw new FileNotFoundException(
+                //    string.Format("File at path {0} isn't exist!",
+                //        filePath));
+                //File.Create(filePath);
+                //Thread.Sleep(TimeSpan.FromMilliseconds(300));
+                using(FileStream f = new FileStream(filePath, FileMode.CreateNew))
+                { }
+            }
             //File.WriteAllText(filePath, JsonConvert.SerializeObject(list));
 
             try

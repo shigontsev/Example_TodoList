@@ -5,7 +5,9 @@ namespace Entities
 {
     public class Note
     {
-        public Guid Id { get; }
+        // Так хочется заканпсулировать свойства, но Json не позволяет =(
+
+        public Guid Id { get; set; }
 
         [JsonIgnore]
         private string _name;
@@ -13,7 +15,7 @@ namespace Entities
         public string Name
         {
             get { return _name; }
-            private set
+            set
             {
                 if (String.IsNullOrWhiteSpace(value))
                 {
@@ -29,7 +31,7 @@ namespace Entities
         public Priority Priority
         {
             get { return _priority; }
-            private set
+            set
             {
                 if (value <= 0)
                 {
@@ -45,7 +47,7 @@ namespace Entities
         public string Text
         {
             get { return _text; }
-            private set
+            set
             {
                 if (String.IsNullOrWhiteSpace(value) )
                 {
@@ -55,6 +57,10 @@ namespace Entities
             }
         }
 
+        public Note()
+        {
+
+        }
 
         public Note(Guid id, string name, Priority priority, string text)
         {
@@ -72,5 +78,20 @@ namespace Entities
             Text = text;
         }
 
+
+        public override string ToString()
+        {
+            return String.Join(Environment.NewLine,new string[]{ 
+                $"Id = {Id}",
+                $"Name = {Name}",
+                $"Priority = {Priority}",
+                $"Text = {Text}"
+            });
+        }
+
+        public string ShowNameAndPriority()
+        {
+            return string.Format($"Name = {Name}; Priority = {Priority}");
+        }
     }
 }

@@ -25,7 +25,7 @@ namespace DAL.JsonDAL
             var notes = GetAll();
             notes.Add(note);
 
-            JsonDAO<Note>.Serialize(_filePath_Notes, notes);
+            JsonDAO<Note>.Serialize(_filePath_Notes, notes.OrderBy(x=>x.Priority).ToList());
         }
 
         //public void CompleteTask(Guid id)
@@ -59,12 +59,27 @@ namespace DAL.JsonDAL
             if (note != null)
             {
                 var notes = GetAll();
-                notes.Remove(note);
+                bool a = notes.Remove(note);
+                JsonDAO<Note>.Serialize(_filePath_Notes, notes);
+
+                return a;
+            }
+            
+            return false;
+        }
+
+        public bool RemoveAt(int index)
+        {
+            var notes = GetAll();
+
+            if (index < notes.Count)
+            {
+                notes.RemoveAt(index);
                 JsonDAO<Note>.Serialize(_filePath_Notes, notes);
 
                 return true;
             }
-            
+
             return false;
         }
 
