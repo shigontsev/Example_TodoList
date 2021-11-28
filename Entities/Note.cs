@@ -89,9 +89,18 @@ namespace Entities
             });
         }
 
-        public string ShowNameAndPriority()
+        public string ShowShortInfo()
         {
             return string.Format($"Name = {Name}; Priority = {Priority}");
+        }
+
+        public string ShowFullInfo()
+        {
+            return String.Join(Environment.NewLine, new string[]{
+                $"Name = {Name}",
+                $"Priority = {Priority}",
+                $"Text = {Text}"
+            });
         }
     }
 }

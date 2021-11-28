@@ -15,7 +15,13 @@ namespace DAL.Interfaces
         /// <param name="id"></param>
         bool Complete(Guid id);
 
-        //void GetAll();
+        /// <summary>
+        /// Выполнить первую приоритетную задачу
+        /// </summary>
+        /// <returns></returns>
+        bool CompleteTop(out Note note);
+
+        List<NoteCompleted> GetAll();
 
         List<Note> GetAllCompleted();
 

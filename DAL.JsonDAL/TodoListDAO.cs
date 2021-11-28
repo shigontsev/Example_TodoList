@@ -58,11 +58,10 @@ namespace DAL.JsonDAL
             var note = GetById(id);
             if (note != null)
             {
-                var notes = GetAll();
-                bool a = notes.Remove(note);
+                var notes = GetAll().Where(x => x.Id == note.Id).ToList();
                 JsonDAO<Note>.Serialize(_filePath_Notes, notes);
 
-                return a;
+                return true;
             }
             
             return false;

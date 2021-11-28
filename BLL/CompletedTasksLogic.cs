@@ -20,6 +20,16 @@ namespace BLL
             return _сompletedTasksDAO.Complete(id);
         }
 
+        public bool CompleteTop(out Note note)
+        {
+            return _сompletedTasksDAO.CompleteTop(out note);
+        }
+
+        public List<NoteCompleted> GetAll()
+        {
+            return _сompletedTasksDAO.GetAll();
+        }
+
         public List<Note> GetAllCompleted()
         {
             return _сompletedTasksDAO.GetAllCompleted();

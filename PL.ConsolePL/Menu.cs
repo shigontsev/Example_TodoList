@@ -34,9 +34,10 @@ namespace PL.ConsolePL
                 "3 : Удалить дело",
                 "4 : Сортировать список по Приоритету",
                 "5 : Найти дело",
-                "6 : Выподнить выбранное дело",
-                "7 : Список выполненых дел",
-                "8 : Список невыполненых дел",
+                "6 : Выполнить выбранное дело",
+                "7 : Выполнить первое приоритеное дело",
+                "8 : Список выполненых дел",
+                "9 : Список невыполненых дел",
                 "Ввод \'q\' Выйти из приложения",
                 "ENTER: "
             };
@@ -62,6 +63,7 @@ namespace PL.ConsolePL
                 SortTasks,
                 SearchTaskByName,
                 CompleteTask,
+                CompleteTopTask,
                 ShowCompletedTasks, 
                 ShowUnCompletedTasks
                 );
@@ -86,17 +88,21 @@ namespace PL.ConsolePL
 
         private void PrintTodoList()
         {
-            var todoList = bdTodoList.GetAll();
+            //var todoList = bdTodoList.GetAll();
+            var todoList = bdCompletedList.GetAll();
 
             Console.WriteLine("Список дел:");
             int index = 0;
             foreach (var item in todoList)
             {
-                Console.WriteLine($"№{index} : {item.ShowNameAndPriority()}");
+                Console.WriteLine($"№{index} : {item.ShowShortInfo()}");
                 index++;
             }
         }
 
+        /// <summary>
+        /// №1 : Посмотреть список дел
+        /// </summary>
         private void ShowTodoList()
         {
             PrintTodoList();
@@ -104,6 +110,9 @@ namespace PL.ConsolePL
             Console.ReadLine();
         }
 
+        /// <summary>
+        /// №2 : Добавить дело
+        /// </summary>
         private void AddTask()
         {
             //Note note;
@@ -122,7 +131,7 @@ namespace PL.ConsolePL
                         );
                     bdTodoList.Add(note);
 
-                    Console.WriteLine($"Добавлена задача { note.ShowNameAndPriority()}");
+                    Console.WriteLine($"Добавлена задача { note.ShowShortInfo()}");
 
                     Console.Write("Введите любую кнопку чтобы вернуться:");
                     Console.ReadLine();
@@ -162,6 +171,9 @@ namespace PL.ConsolePL
             }
         }
 
+        /// <summary>
+        /// №3 : Удалить дело
+        /// </summary>
         private void RemoveTask()
         {
             PrintTodoList();
@@ -192,11 +204,11 @@ namespace PL.ConsolePL
                     var note = notes[index];
                     if(bdTodoList.RemoveAt(index))
                     {
-                        Console.WriteLine($"{note.ShowNameAndPriority()} успешно удален");
+                        Console.WriteLine($"{note.ShowShortInfo()} успешно удален");
                     }
                     else
                     {
-                        Console.WriteLine($"{note.ShowNameAndPriority()} неудачная попытка удаления");
+                        Console.WriteLine($"{note.ShowShortInfo()} неудачная попытка удаления");
                     }
                 }
                 catch (ArgumentOutOfRangeException)
@@ -212,6 +224,9 @@ namespace PL.ConsolePL
             Console.ReadLine();
         }
 
+        /// <summary>
+        /// №4 : Сортировать список по Приоритету
+        /// </summary>
         private void SortTasks()
         {
             bdTodoList.SortByPriority();
@@ -223,6 +238,9 @@ namespace PL.ConsolePL
             Console.ReadLine();
         }
 
+        /// <summary>
+        /// №5 : Найти дело
+        /// </summary>
         private void SearchTaskByName()
         {
             //PrintTodoList();
@@ -237,13 +255,16 @@ namespace PL.ConsolePL
             }
             else
             {
-                Console.WriteLine(note);
+                Console.WriteLine(note.ShowFullInfo());
             }
 
             Console.Write("Введите любую кнопку чтобы вернуться:");
             Console.ReadLine();
         }
 
+        /// <summary>
+        /// №6 : Выполнить выбранное дело
+        /// </summary>
         private void CompleteTask()
         {
             PrintTodoList();
@@ -258,11 +279,11 @@ namespace PL.ConsolePL
                     var note = notes[index];
                     if (bdCompletedList.Complete(note.Id))
                     {
-                        Console.WriteLine($"{note.ShowNameAndPriority()} успешно выполнено");
+                        Console.WriteLine($"{note.ShowShortInfo()} успешно выполнено");
                     }
                     else
                     {
-                        Console.WriteLine($"{note.ShowNameAndPriority()} такая задача уже выполнена");
+                        Console.WriteLine($"{note.ShowShortInfo()} такая задача уже выполнена");
                     }
                 }
                 catch (ArgumentOutOfRangeException)
@@ -278,6 +299,30 @@ namespace PL.ConsolePL
             Console.ReadLine();
         }
 
+        /// <summary>
+        /// №7 : Выполнить первое приоритеное дело
+        /// </summary>
+        private void CompleteTopTask()
+        {
+            PrintTodoList();
+            var b = bdCompletedList.CompleteTop(out Note note);
+            if (b)
+            {
+                Console.WriteLine("Выполнена приоритетная Задача: ");
+                Console.WriteLine(note.ShowShortInfo());
+            }
+            else
+            {
+                Console.WriteLine("Все задачи выполнены!!!");
+            }
+
+            Console.Write("Введите любую кнопку чтобы вернуться:");
+            Console.ReadLine();
+        }
+
+        /// <summary>
+        /// №8 : Список выполненых дел
+        /// </summary>
         private void ShowCompletedTasks()
         {
             var todoList = bdCompletedList.GetAllCompleted();
@@ -286,13 +331,16 @@ namespace PL.ConsolePL
             int index = 0;
             foreach (var item in todoList)
             {
-                Console.WriteLine($"№{index} : {item.ShowNameAndPriority()}");
+                Console.WriteLine($"№{index} : {item.ShowShortInfo()}");
                 index++;
             }
             Console.Write("Введите любую кнопку чтобы вернуться:");
             Console.ReadLine();
         }
 
+        /// <summary>
+        /// №9 : Список невыполненых дел
+        /// </summary>
         private void ShowUnCompletedTasks()
         {
             var todoList = bdCompletedList.GetAllUnCompleted();
@@ -301,7 +349,7 @@ namespace PL.ConsolePL
             int index = 0;
             foreach (var item in todoList)
             {
-                Console.WriteLine($"№{index} : {item.ShowNameAndPriority()}");
+                Console.WriteLine($"№{index} : {item.ShowShortInfo()}");
                 index++;
             }
             Console.Write("Введите любую кнопку чтобы вернуться:");

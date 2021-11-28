@@ -27,12 +27,31 @@ namespace DAL.JsonDAL
         public bool Complete(Guid id)
         {
             var idList = GetAllIdCompleted();
-            if (!idList.Contains(id))
+            if (idList.Count == 0 || !idList.Contains(id))
             {
                 idList.Add(id);
                 JsonDAO<Guid>.Serialize(_filePath_СompletedTasks, idList);
                 return true;
             }
+            return false;
+        }
+
+        public bool CompleteTop(out Note note)
+        {
+            var idList = GetAllIdCompleted();
+            var notes = GetAllTask();
+
+            if (idList.Count < notes.Count)
+            {
+                note = GetAllTask().FirstOrDefault(x => !idList.Contains(x.Id));
+                if (note != null)
+                {
+                    idList.Add(note.Id);
+                    JsonDAO<Guid>.Serialize(_filePath_СompletedTasks, idList);
+                    return true;
+                }
+            }
+            note = null;
             return false;
         }
 
@@ -66,6 +85,15 @@ namespace DAL.JsonDAL
 
             var result = notes.Except(notesCompleted);
             return result.ToList();
+        }
+
+        public List<NoteCompleted> GetAll()
+        {
+            var notes = GetAllTask();
+            var idListCompleted = GetAllIdCompleted();
+
+            return (from item in notes
+                   select new NoteCompleted(item, idListCompleted.Contains(item.Id))).ToList();
         }
     }
 }
