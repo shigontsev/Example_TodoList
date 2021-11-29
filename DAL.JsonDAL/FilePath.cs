@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAL.JsonDAL
 {
@@ -14,6 +10,6 @@ namespace DAL.JsonDAL
 
         public static string JsonNotesPath = JsonFilesPath + "Notes.json";
 
-        public static string JsonСompletedTasks = JsonFilesPath + "СompletedTasks.json";
+        public static string JsonСompletedTasksPath = JsonFilesPath + "СompletedTasks.json";
     }
 }

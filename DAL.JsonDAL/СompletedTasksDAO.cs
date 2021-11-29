@@ -3,25 +3,19 @@ using Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAL.JsonDAL
 {
     public class СompletedTasksDAO : IСompletedTasksDAO
     {
-
-        //private List<Guid> _content;
-
         private string _filePath_Notes;
 
         private string _filePath_СompletedTasks;
 
         public СompletedTasksDAO()
         {
-            _filePath_СompletedTasks = FilePath.JsonСompletedTasks;
-            _filePath_Notes = FilePath.JsonNotesPath;
-            //_content = JsonDAO<Guid>.Deserialize(_filePath_СompletedTasks);
+            _filePath_СompletedTasks = FilePath.JsonСompletedTasksPath;
+            _filePath_Notes = FilePath.JsonNotesPath;            
         }
 
         public bool Complete(Guid id)
@@ -43,7 +37,9 @@ namespace DAL.JsonDAL
 
             if (idList.Count < notes.Count)
             {
-                note = GetAllTask().FirstOrDefault(x => !idList.Contains(x.Id));
+                note = GetAllTask()
+                    .OrderBy(x => x.Priority)
+                    .FirstOrDefault(x => !idList.Contains(x.Id));
                 if (note != null)
                 {
                     idList.Add(note.Id);
@@ -74,7 +70,11 @@ namespace DAL.JsonDAL
 
             var result = from nts in notes
                          join ids in idList on nts.Id equals ids
-                         select new Note(id: nts.Id, name: nts.Name, priority: nts.Priority, text: nts.Text);
+                         select new Note(
+                             id: nts.Id, 
+                             name: nts.Name, 
+                             priority: nts.Priority, 
+                             text: nts.Text);
             return result.ToList();
         }
 
@@ -93,7 +93,8 @@ namespace DAL.JsonDAL
             var idListCompleted = GetAllIdCompleted();
 
             return (from item in notes
-                   select new NoteCompleted(item, idListCompleted.Contains(item.Id))).ToList();
+                   select new NoteCompleted(item, idListCompleted.Contains(item.Id)))
+                   .ToList();
         }
     }
 }

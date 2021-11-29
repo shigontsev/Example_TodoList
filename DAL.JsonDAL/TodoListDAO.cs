@@ -3,21 +3,17 @@ using Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace DAL.JsonDAL
 {
     public class TodoListDAO : ITodoListDAO
     {
-        //private List<Note> _content;
-
         private string _filePath_Notes;
 
         public TodoListDAO()
         {
             _filePath_Notes = FilePath.JsonNotesPath;
-            //_content = JsonDAO<Note>.Deserialize(_filePath);
         }
 
         public void Add(Note note)
@@ -27,11 +23,6 @@ namespace DAL.JsonDAL
 
             JsonDAO<Note>.Serialize(_filePath_Notes, notes.OrderBy(x=>x.Priority).ToList());
         }
-
-        //public void CompleteTask(Guid id)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public List<Note> GetAll()
         {
@@ -48,17 +39,31 @@ namespace DAL.JsonDAL
             return GetAll().FirstOrDefault(x => x.Name == name);
         }
 
-        //public List<Note> GetBySubName(string subName)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public List<Note> GetBySubName(string subName)
+        {
+            var reg = new Regex($"{subName}.*",
+                RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            var notes = GetAll();
+            var result = new List<Note>();
+            
+            foreach (var note in notes)
+            {
+                Match m = reg.Match(note.Name);
+                if (m.Success)
+                {
+                    result.Add(note);
+                }
+            }
+
+            return result;
+        }
 
         public bool Remove(Guid id)
         {
             var note = GetById(id);
             if (note != null)
             {
-                var notes = GetAll().Where(x => x.Id == note.Id).ToList();
+                var notes = GetAll().Where(x => x.Id != note.Id).ToList();
                 JsonDAO<Note>.Serialize(_filePath_Notes, notes);
 
                 return true;

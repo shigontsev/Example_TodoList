@@ -50,6 +50,13 @@ namespace BLL.Interfaces
         Note GetByName(string name);
 
         /// <summary>
+        /// Вывести список Задач по SubName
+        /// </summary>
+        /// <param name="subName"></param>
+        /// <returns></returns>
+        List<Note> GetBySubName(string subName);
+
+        /// <summary>
         /// Вернуть Задачу по его Id
         /// </summary>
         /// <param name="id"></param>

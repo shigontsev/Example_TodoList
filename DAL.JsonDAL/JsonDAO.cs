@@ -15,10 +15,6 @@ namespace DAL.JsonDAL
         /// <returns></returns>
         internal static List<T> Deserialize(string filePath)
         {
-            //if (!File.Exists(filePath))
-            //    throw new FileNotFoundException(
-            //        string.Format("File at path {0} isn't exist!",
-            //            filePath));
             if (!File.Exists(filePath))
                 return new List<T>();
 
@@ -34,7 +30,6 @@ namespace DAL.JsonDAL
             {
                 throw new Exception(e.Message);
             }
-            //List<T> users = JsonConvert.DeserializeObject<List<T>>(File.ReadAllText(filePath));
 
             return users == null? new List<T>(): users;
         }
@@ -48,15 +43,9 @@ namespace DAL.JsonDAL
         {
             if (!File.Exists(filePath))
             {
-                //throw new FileNotFoundException(
-                //    string.Format("File at path {0} isn't exist!",
-                //        filePath));
-                //File.Create(filePath);
-                //Thread.Sleep(TimeSpan.FromMilliseconds(300));
                 using(FileStream f = new FileStream(filePath, FileMode.CreateNew))
                 { }
             }
-            //File.WriteAllText(filePath, JsonConvert.SerializeObject(list));
 
             try
             {

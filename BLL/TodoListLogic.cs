@@ -3,9 +3,6 @@ using DAL.Interfaces;
 using Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL
 {
@@ -36,6 +33,11 @@ namespace BLL
         public Note GetByName(string name)
         {
             return _todoListDAO.GetByName(name);
+        }
+
+        public List<Note> GetBySubName(string subName)
+        {
+            return _todoListDAO.GetBySubName(subName);
         }
 
         public bool Remove(Guid id)

@@ -1,9 +1,6 @@
 ﻿using Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
@@ -38,12 +35,12 @@ namespace DAL.Interfaces
         /// </summary>
         void SortByPriority();
 
-        ///// <summary>
-        ///// Вывести список Задач по SubName
-        ///// </summary>
-        ///// <param name="subName"></param>
-        ///// <returns></returns>
-        //List<Note> GetBySubName(string subName);
+        /// <summary>
+        /// Вывести список Задач по SubName
+        /// </summary>
+        /// <param name="subName"></param>
+        /// <returns></returns>
+        List<Note> GetBySubName(string subName);
 
         /// <summary>
         /// Вернуть Задачу по его Name
@@ -58,11 +55,5 @@ namespace DAL.Interfaces
         /// <param name="id"></param>
         /// <returns></returns>
         Note GetById(Guid id);
-
-        ///// <summary>
-        ///// Выполнить Задачу по его Id
-        ///// </summary>
-        ///// <param name="id"></param>
-        //void CompleteTask(Guid id);
     }
 }

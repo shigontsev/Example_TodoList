@@ -2,11 +2,6 @@
 using Dependencies;
 using Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PL.ConsolePL
 {
@@ -33,35 +28,23 @@ namespace PL.ConsolePL
                 "2 : Добавить дело",
                 "3 : Удалить дело",
                 "4 : Сортировать список по Приоритету",
-                "5 : Найти дело",
-                "6 : Выполнить выбранное дело",
-                "7 : Выполнить первое приоритеное дело",
-                "8 : Список выполненых дел",
-                "9 : Список невыполненых дел",
+                "5 : Найти дело по его имени",
+                "6 : Найти дело по подстроке его имени",
+                "7 : Выполнить выбранное дело",
+                "8 : Выполнить первое приоритеное дело",
+                "9 : Список выполненых дел",
+                "10 : Список невыполненых дел",
                 "Ввод \'q\' Выйти из приложения",
                 "ENTER: "
             };
 
-            //string[] contentMenu_Resetter = {
-            //    "Выбран откат изменений",
-            //    "Выберите следующее:",
-            //    "1 : Откат по индексу фиксации",
-            //    "2 : Откат по выбранной дате и времени",
-            //    "Ввод \'q\' Вернуться назад", "ENTER: "
-            //};
-
-            //MenuAction
-            //DelegateMenu(contentMenu,
-            //    ShowTodoList,
-            //    () => DelegateMenu(contentMenu_Resetter,
-            //            Resetter.Run_Fixation,
-            //            Resetter.Run_SelectResetByDate));
             DelegateMenu(contentMenu,
                 ShowTodoList,
                 AddTask,
                 RemoveTask,
                 SortTasks,
                 SearchTaskByName,
+                SearchTaskBySubName,
                 CompleteTask,
                 CompleteTopTask,
                 ShowCompletedTasks, 
@@ -100,14 +83,20 @@ namespace PL.ConsolePL
             }
         }
 
+        private void ShowEndFunc()
+        {
+            Console.Write("Введите любую кнопку чтобы вернуться:");
+            Console.ReadLine();
+        }
+
         /// <summary>
         /// №1 : Посмотреть список дел
         /// </summary>
         private void ShowTodoList()
         {
             PrintTodoList();
-            Console.Write("Введите любую кнопку чтобы вернуться:");
-            Console.ReadLine();
+
+            ShowEndFunc();
         }
 
         /// <summary>
@@ -115,7 +104,6 @@ namespace PL.ConsolePL
         /// </summary>
         private void AddTask()
         {
-            //Note note;
             while (true)
             {
                 try
@@ -133,8 +121,7 @@ namespace PL.ConsolePL
 
                     Console.WriteLine($"Добавлена задача { note.ShowShortInfo()}");
 
-                    Console.Write("Введите любую кнопку чтобы вернуться:");
-                    Console.ReadLine();
+                    ShowEndFunc();
                     break;
                 }
                 catch (Exception e)
@@ -180,21 +167,6 @@ namespace PL.ConsolePL
 
             Console.WriteLine("Введите номер № задачи, которую хотите удалить: ");
             var notes = bdTodoList.GetAll();
-
-            //var a = int.TryParse(Console.ReadLine(), out int index);
-
-
-
-            //while (!int.TryParse(Console.ReadLine(), out int index) && !(index>=notes.Count || index < 0))
-            //{
-            //    Console.WriteLine("Неверный введеный формат индекса или индекс вышел за границу, повторите попытку");
-            //}
-            //bool b = false
-            //    do
-            //{
-
-            //}while()
-            //back:
             var b = int.TryParse(Console.ReadLine(), out int index);
 
             if (b)
@@ -220,8 +192,8 @@ namespace PL.ConsolePL
             {
                 Console.WriteLine("Неверный формат ввода значения");
             }
-            Console.Write("Введите любую кнопку чтобы вернуться:");
-            Console.ReadLine();
+
+            ShowEndFunc();
         }
 
         /// <summary>
@@ -231,15 +203,13 @@ namespace PL.ConsolePL
         {
             bdTodoList.SortByPriority();
 
+            Console.WriteLine("Сортирвка списка выполнина успешно ");
 
-            Console.Write("Сортирвка списка выполнина успешно " +
-                Environment.NewLine +
-                "Введите любую кнопку чтобы вернуться:");
-            Console.ReadLine();
+            ShowEndFunc();
         }
 
         /// <summary>
-        /// №5 : Найти дело
+        /// №5 : Найти дело по его имени
         /// </summary>
         private void SearchTaskByName()
         {
@@ -258,12 +228,38 @@ namespace PL.ConsolePL
                 Console.WriteLine(note.ShowFullInfo());
             }
 
-            Console.Write("Введите любую кнопку чтобы вернуться:");
-            Console.ReadLine();
+            ShowEndFunc();
         }
 
         /// <summary>
-        /// №6 : Выполнить выбранное дело
+        /// №6 : Найти дело по подстроке его имени
+        /// </summary>
+        private void SearchTaskBySubName()
+        {
+            Console.WriteLine("Введите название подстроки задачи: ");
+            var name = Console.ReadLine().Trim();
+            var notes = bdTodoList.GetBySubName(name);
+
+            if (notes.Count == 0)
+            {
+                Console.WriteLine("Такой задачи не существует");
+            }
+            else
+            {
+                Console.WriteLine("Список дел:");
+                int index = 0;
+                foreach (var item in notes)
+                {
+                    Console.WriteLine($"№{index} : {item.ShowFullInfo()}");
+                    index++;
+                }
+            }
+
+            ShowEndFunc();
+        }
+
+        /// <summary>
+        /// №7 : Выполнить выбранное дело
         /// </summary>
         private void CompleteTask()
         {
@@ -295,12 +291,11 @@ namespace PL.ConsolePL
             {
                 Console.WriteLine("Неверный формат ввода значения");
             }
-            Console.Write("Введите любую кнопку чтобы вернуться:");
-            Console.ReadLine();
+            ShowEndFunc();
         }
 
         /// <summary>
-        /// №7 : Выполнить первое приоритеное дело
+        /// №8 : Выполнить первое приоритеное дело
         /// </summary>
         private void CompleteTopTask()
         {
@@ -316,12 +311,11 @@ namespace PL.ConsolePL
                 Console.WriteLine("Все задачи выполнены!!!");
             }
 
-            Console.Write("Введите любую кнопку чтобы вернуться:");
-            Console.ReadLine();
+            ShowEndFunc();
         }
 
         /// <summary>
-        /// №8 : Список выполненых дел
+        /// №9 : Список выполненых дел
         /// </summary>
         private void ShowCompletedTasks()
         {
@@ -334,12 +328,12 @@ namespace PL.ConsolePL
                 Console.WriteLine($"№{index} : {item.ShowShortInfo()}");
                 index++;
             }
-            Console.Write("Введите любую кнопку чтобы вернуться:");
-            Console.ReadLine();
+
+            ShowEndFunc();
         }
 
         /// <summary>
-        /// №9 : Список невыполненых дел
+        /// №10 : Список невыполненых дел
         /// </summary>
         private void ShowUnCompletedTasks()
         {
@@ -352,8 +346,8 @@ namespace PL.ConsolePL
                 Console.WriteLine($"№{index} : {item.ShowShortInfo()}");
                 index++;
             }
-            Console.Write("Введите любую кнопку чтобы вернуться:");
-            Console.ReadLine();
+
+            ShowEndFunc();
         }
     }
 }
