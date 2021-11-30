@@ -137,9 +137,10 @@ namespace PL.ConsolePL
             while(true)
             {
                 Console.WriteLine("Выберите приоретет задания 1-5: ");
-                try
+                bool b = int.TryParse(Console.ReadLine(), out int key);
+                if (b)
                 {
-                    switch (int.Parse(Console.ReadLine()))
+                    switch (key)
                     {
                         case 1: return Priority.VeryHigh; break;
                         case 2: return Priority.High; break;
@@ -151,7 +152,7 @@ namespace PL.ConsolePL
                             break;
                     }
                 }
-                catch (Exception)
+                else
                 {
                     Console.WriteLine("Введен не правильный формат приоритета повторите попытку!!!");
                 }

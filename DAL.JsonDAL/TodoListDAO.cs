@@ -21,7 +21,8 @@ namespace DAL.JsonDAL
             var notes = GetAll();
             notes.Add(note);
 
-            JsonDAO<Note>.Serialize(_filePath_Notes, notes.OrderBy(x=>x.Priority).ToList());
+            //JsonDAO<Note>.Serialize(_filePath_Notes, notes.OrderBy(x => x.Priority).ToList());
+            JsonDAO<Note>.Serialize(_filePath_Notes, notes);
         }
 
         public List<Note> GetAll()
