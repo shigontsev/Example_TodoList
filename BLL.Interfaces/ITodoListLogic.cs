@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace DAL.Interfaces
+namespace BLL.Interfaces
 {
-    public interface ITodoListDAO
+    public interface ITodoListLogic
     {
         /// <summary>
         /// Вывести весь перечень задач
@@ -25,6 +25,13 @@ namespace DAL.Interfaces
         bool Remove(Guid id);
 
         /// <summary>
+        /// Удалить задачу
+        /// </summary>
+        /// <param name="note"></param>
+        /// <returns></returns>
+        bool Remove(Note note);
+
+        /// <summary>
         /// Удалить задачу по его Index
         /// </summary>
         /// <param name="index"></param>
@@ -36,18 +43,18 @@ namespace DAL.Interfaces
         void SortByPriority();
 
         /// <summary>
-        /// Вывести список Задач по SubName
-        /// </summary>
-        /// <param name="subName"></param>
-        /// <returns></returns>
-        List<Note> GetBySubName(string subName);
-
-        /// <summary>
         /// Вернуть Задачу по его Name
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         Note GetByName(string name);
+
+        /// <summary>
+        /// Вывести список Задач по SubName
+        /// </summary>
+        /// <param name="subName"></param>
+        /// <returns></returns>
+        List<Note> GetBySubName(string subName);
 
         /// <summary>
         /// Вернуть Задачу по его Id

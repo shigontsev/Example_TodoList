@@ -5,7 +5,9 @@ namespace Entities
 {
     public class Note
     {
-        public Guid Id { get; }
+        // Так хочется заканпсулировать свойства, но Json не позволяет =(
+
+        public Guid Id { get; set; }
 
         [JsonIgnore]
         private string _name;
@@ -13,7 +15,7 @@ namespace Entities
         public string Name
         {
             get { return _name; }
-            private set
+            set
             {
                 if (String.IsNullOrWhiteSpace(value))
                 {
@@ -24,16 +26,16 @@ namespace Entities
         }
 
         [JsonIgnore]
-        private int _priority;
+        private Priority _priority;
 
-        public int Priority
+        public Priority Priority
         {
             get { return _priority; }
-            private set
+            set
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(Priority), $"Аргумент {nameof(Priority)} должен быть в диапозоне 1...N");
+                    throw new ArgumentOutOfRangeException(nameof(Priority), $"Аргумент {nameof(Priority)} должен быть в диапозоне VeryHigh...VeryLow (1...5)");
                 }
                 _priority = value;
             }
@@ -45,7 +47,7 @@ namespace Entities
         public string Text
         {
             get { return _text; }
-            private set
+            set
             {
                 if (String.IsNullOrWhiteSpace(value) )
                 {
@@ -55,8 +57,12 @@ namespace Entities
             }
         }
 
+        public Note()
+        {
 
-        public Note(Guid id, string name, int priority, string text)
+        }
+
+        public Note(Guid id, string name, Priority priority, string text)
         {
             Id = id;
             Name = name;
@@ -64,7 +70,7 @@ namespace Entities
             Text = text;
         }
 
-        public Note(string name, int priority, string text)
+        public Note(string name, Priority priority, string text)
         {
             Id = Guid.NewGuid();
             Name = name;
@@ -72,5 +78,29 @@ namespace Entities
             Text = text;
         }
 
+
+        public override string ToString()
+        {
+            return String.Join(Environment.NewLine,new string[]{ 
+                $"Id = {Id}",
+                $"Name = {Name}",
+                $"Priority = {Priority}",
+                $"Text = {Text}"
+            });
+        }
+
+        public string ShowShortInfo()
+        {
+            return string.Format($"Name = {Name}; Priority = {Priority}");
+        }
+
+        public string ShowFullInfo()
+        {
+            return String.Join(Environment.NewLine, new string[]{
+                $"Name = {Name}",
+                $"Priority = {Priority}",
+                $"Text = {Text}"
+            });
+        }
     }
 }

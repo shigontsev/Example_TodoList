@@ -3,54 +3,60 @@ using Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace DAL.JsonDAL
 {
     public class TodoListDAO : ITodoListDAO
     {
-        private List<Note> _content;
-
-        private string _filePath;
+        private string _filePath_Notes;
 
         public TodoListDAO()
         {
-            _filePath = "";
-            _content = JsonDAO<Note>.Deserialize(_filePath);
+            _filePath_Notes = FilePath.JsonNotesPath;
         }
 
         public void Add(Note note)
         {
-            _content.Add(note);
-            SortByPriority();
+            var notes = GetAll();
+            notes.Add(note);
 
-            JsonDAO<Note>.Serialize(_filePath, _content);
+            //JsonDAO<Note>.Serialize(_filePath_Notes, notes.OrderBy(x => x.Priority).ToList());
+            JsonDAO<Note>.Serialize(_filePath_Notes, notes);
         }
-
-        //public void CompleteTask(Guid id)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public List<Note> GetAll()
         {
-            return _content.ToList();
+            return JsonDAO<Note>.Deserialize(_filePath_Notes);
         }
 
         public Note GetById(Guid id)
         {
-            return _content.FirstOrDefault(x => x.Id == id);
+            return GetAll().FirstOrDefault(x => x.Id == id);
         }
 
         public Note GetByName(string name)
         {
-            return _content.FirstOrDefault(x => x.Name == name);
+            return GetAll().FirstOrDefault(x => x.Name == name);
         }
 
         public List<Note> GetBySubName(string subName)
         {
-            throw new NotImplementedException();
+            var reg = new Regex($"{subName}.*",
+                RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            var notes = GetAll();
+            var result = new List<Note>();
+            
+            foreach (var note in notes)
+            {
+                Match m = reg.Match(note.Name);
+                if (m.Success)
+                {
+                    result.Add(note);
+                }
+            }
+
+            return result;
         }
 
         public bool Remove(Guid id)
@@ -58,8 +64,8 @@ namespace DAL.JsonDAL
             var note = GetById(id);
             if (note != null)
             {
-                _content.Remove(note);
-                JsonDAO<Note>.Serialize(_filePath, (List<Note>)_content);
+                var notes = GetAll().Where(x => x.Id != note.Id).ToList();
+                JsonDAO<Note>.Serialize(_filePath_Notes, notes);
 
                 return true;
             }
@@ -67,9 +73,25 @@ namespace DAL.JsonDAL
             return false;
         }
 
+        public bool RemoveAt(int index)
+        {
+            var notes = GetAll();
+
+            if (index < notes.Count)
+            {
+                notes.RemoveAt(index);
+                JsonDAO<Note>.Serialize(_filePath_Notes, notes);
+
+                return true;
+            }
+
+            return false;
+        }
+
         public void SortByPriority()
         {
-            _content = _content.OrderBy(x => x.Priority).ToList();
+            var notes = GetAll().OrderBy(x => x.Priority).ToList();
+            JsonDAO<Note>.Serialize(_filePath_Notes, notes);
         }
     }
 }
